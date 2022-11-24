@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav id="navbar">
+      <header><strong>Spotify Docs</strong></header>
+      <ul class="mpb">
+          <a class="nav-link" href="#music_playback"
+            >Music Playback</a
+          >
+        </li>
+        <li>
+          <a class="nav-link" href="#music_metadata"
+            >Music Metadata</a
+          >
+        </li>
+        <li><a class="nav-link" href="#user_data">User Data</a></li>
+        <li><a class="nav-link" href="#spotify_connect">Spotify Connect</a></li>
+        <li>
+          <a class="nav-link" href="#personalization"
+            >Personalization</a
+          >
+        </li>
+        <li><a class="nav-link" href="#reference">Reference</a></li>
+      </ul>
+    </nav>
+    <main id="main-doc">
+      <section class="main-section" id="music_playback">
+        <header><strong>Music Playback</strong></header>
+        <h3>Let 'em play!Give users built-in music playback using Spotify's API and SDKs.</h3>
+
+        <div class="Web_Playback_SDK">
+          <h2>Authenticating with Spotify</h2>
+          <article>
+          <p>
+            The Web Playback SDK needs an access token from your personal Spotify Premium account, so the first thing we need to do is to create an application. The application contains your credentials needed to request an access token.
+          </p>
+
+          <p>
+            Go to Dashboard, click on the Log in button and accept the grant permissions dialog box. The dashboard is the place where we can create applications and control the API credentials.
+          </p>
+
+          <p>
+            Click on the Create an APP button. Go ahead and provide a name and a short description to your new application. Finally accept the terms and conditions and click on Create. Your new application contains your Client Id and Client Secret needed to authorize the application we are about to code!
+          </p>
+          <ul>
+            <li>
+              Installation
+            </li>
+
+            <code>
+              < !DOCTYPE html>
+              < html>
+              < head>
+                < title>Spotify Web Playback SDK Quick Start< /title>
+              < /head>
+              < body>
+                < h1>Spotify Web Playback SDK Quick Start</h1>
+              < /body>
+              < /html>
+            </code>
+
+            <p>To install the Web Playback SDK, we need to embed the SDK. Right after the h1 tag, insert the following code:</p>
+
+            <code>
+              < script src="https://sdk.scdn.co/spotify-player.js">< /script>
+            </code>
+
+            <li> Initialization
+            </li>
+
+            <p>Once the Web Playback SDK has been correctly included, we can initialize the player immediately. Let’s add a new script tag with the following content (don’t forget to replace the token variable’s value with your previously generated access token):</p>
+
+            <code>
+              window.onSpotifyWebPlaybackSDKReady = () => {
+                const token = '[My access token]';
+                const player = new Spotify.Player({
+                  name: 'Web Playback SDK Quick Start Player',
+                  getOAuthToken: cb => { cb(token); },
+                  volume: 0.5
+                });
+            </code>
+
+            <p>
+              The onSpotifyWebPlaybackSDKReady method will be executed once the Web Playback SDK has successfully loaded, creating the instance of the Player and receiving the following parameters:</p>
+              <li>name of the Spotify instance.
+              <li>The callback getOAuthToken expected to provide a valid access_token.</li>
+              <li>The volume of the player represented as a decimal value between 0 and 1.</li>
+            
+
+            <li>Events</li>
+
+            <p>The SDK will emit events to our browser to notify about changes to its internal state. We can use the addListener method to listen and subscribe to those events. You can find detailed information about the events supported by the SDK on the SDK reference page</p>
+
+            <p>The first two events we want to get notified are ready, emitted when the SDK is connected and ready to stream content, and not_ready, in case the connection is broken. In the following example, we will print them out on console once the events are received:</p>
+
+            <code>
+               // Ready
+                player.addListener('ready', ({ device_id }) => {
+                  console.log('Ready with Device ID', device_id);
+                });
+
+                // Not Ready
+                 player.addListener('not_ready', ({ device_id }) => {
+                    console.log('Device ID has gone offline', device_id);
+                });
+            </code>
+
+            <p>Let’s add some listeners to get notified in case something happens during the SDK initialization:</p>
+
+            <code>
+                player.addListener('initialization_error', ({ message }) => { 
+                  console.error(message);
+                });
+
+                player.addListener('authentication_error', ({ message }) => {
+                  console.error(message);
+                });
+
+                player.addListener('account_error', ({ message }) => {
+                  console.error(message);
+                });
+            </code>
+
+            <p>Finally, let’s call connect method to perform the connection of our new Spotify instance:</p>
+
+            <code>
+                player.connect();
+            </code>
+
+            <p>At that point you should have initialized and connected a new player called Web Playback SDK Quick Start Player in Spotify Connect. You can also check the JavaScript console to see the messages emitted by the SDK events.</p>
+
+
+            <li> Controlling playback</li>
+            <p>The Web Playback SDK allows you to control playback so let’s add a button to enable users to toggle play. Let’s add a button:</p>
+
+            <code>< button id="togglePlay">Toggle Play< /button></code>
+            <p>Inside the onSpotifyWebPlaybackSDKReady method we can add an onclick listener and have it interact with the Player object:</p>
+            <code>
+              document.getElementById('togglePlay').onclick = function() {
+  player.togglePlay();
+};
+            </code>
+<p>You can see a list of all the playback controls available in the Web Playback API Reference.</p>
+
+          </ul>
+        </article>
+        </div>
+      </section>
+      <section class="main-section" id="music_metadata">
+        <header><strong>Music Metadata</strong></header>
+        <article>
+          <p>To allow users to search songs, artists, and playlists, set up the metadata features with our Web API.</p>
+
+          <ul>
+            <li>
+              A general understanding of the Internet and the World Wide Web
+              (WWW).
+            </li>
+            <li>Good working knowledge of HyperText Markup Language (HTML).</li>
+            <li>
+              Some programming experience. If you are new to programming, try
+              one of the tutorials linked on the main page about JavaScript.
+            </li>
+          </ul>
+        </article>
+      </section>
+      <section class="main-section" id="user_data">
+        <header><strong>User Data</strong></header>
+        <article>
+          <p>
+            To access user data like saved tracks and albums, set up the accessibility with our Web API.
+          </p>
+
+          <p>
+            Based on simple REST principles, the Spotify Web API endpoints return JSON metadata about music artists, albums, and tracks, directly from the Spotify Data Catalogue.
+          </p>
+          <p>
+            Web API also provides access to user related data, like playlists and music that the user saves in the Your Music library. Such access is enabled through selective authorization, by the user. The base address of Web API is https://api.spotify.com. The API provides a set of endpoints, each with its own unique path. To access private data through the Web API, such as user profiles and playlists, an application must get the user’s permission to access the data. Authorization is via the Spotify Accounts service.
+          </p>
+        </article>
+      </section>
+      <section class="main-section" id="spotify_connect">
+        <header><strong>Spotify Connect</strong></header>
+        <article>
+          Set up Spotify Connect with our Web API to let users control Spotify on speakers, TVs, and other devices.
+
+          <h3>Pagination</h3>
+          <p>Some endpoints support a way of paging the dataset, taking an offset and limit as query parameters:</p>
+          <code
+            >$ curl
+https://api.spotify.com/v1/artists/1vCWHaC5f2uS3yhpwWbIA6/albums?album_type=SINGLE&offset=20&limit=10
+          </code>
+
+          In this example, in a list of 50 (total) singles by the specified artist : From the twentieth (offset) single, retrieve the next 10 (limit) singles.
+        </article>
+      </section>
+      <section class="main-section" id="personalization">
+        <header><strong>Personalization</strong></header>
+        <p>
+          Make it personal! To explore the music listening of users, set up personalized data with the Web API.
+        </p>
+        <p>
+          Web API responses normally include a JSON object. Browse the reference documentation to find descriptions of common responses from each endpoint.
+        </p>
+        <p>
+          All requests to Web API require authentication. This is achieved by sending a valid OAuth access token in the request header. For more information about these authentication methods, see the Web API Authorization Guide.
+        </p>
+      </section>
+      <section class="main-section" id="reference">
+        <header><strong>Reference</strong></header>
+        <article>
+          <ul>
+            <li>Documents are retrieved from <a
+                href="https://developer.spotify.com/documentation/"
+                target="_blank"
+                >Spotify Docs</a
+              >
+            </li>
+          </ul>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
